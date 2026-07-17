@@ -43,6 +43,15 @@ export default async ({ strapi }: { strapi: Core.Strapi & { admin: any } }) => {
   // Setup Permissions
   strapi.admin.services.permission.actionProvider.get('plugin::content-manager.explorer.delete').displayName = 'Soft Delete';
 
+  // Migration: rename explorer.read → explorer.view-deleted in any existing admin_permissions rows
+  const migrationReadViewDeletedRan = await pluginStore.get({ key: 'migration_explorer_read_to_view_deleted' });
+  if (!migrationReadViewDeletedRan) {
+    await strapi.db.connection('admin_permissions')
+      .where({ action: 'plugin::soft-delete.explorer.read' })
+      .update({ action: 'plugin::soft-delete.explorer.view-deleted' });
+    await pluginStore.set({ key: 'migration_explorer_read_to_view_deleted', value: true });
+  }
+
   const contentTypeUids = Object.keys(strapi.contentTypes).filter(supportsContentType);
 
   strapi.admin.services.permission.actionProvider.register({
@@ -60,7 +69,7 @@ export default async ({ strapi }: { strapi: Core.Strapi & { admin: any } }) => {
   });
 
   strapi.admin.services.permission.actionProvider.register({
-    uid: 'explorer.read',
+    uid: 'explorer.view-deleted',
     options: { applyToProperties: [ 'locales' ] },
     section: 'contentTypes',
     displayName: 'Deleted Read',

@@ -63,7 +63,7 @@
             // Filter out content types that the user doesn't have the permission to access
             .filter(contentType =>
               allPermissions.some((permission: any) =>
-                permission.action === `plugin::${PLUGIN_ID}.explorer.read` &&
+                permission.action === `plugin::${PLUGIN_ID}.explorer.view-deleted` &&
                 permission.subject === contentType.uid
               )
             )
@@ -84,7 +84,7 @@
             // Filter out content types that the user doesn't have the permission to access
             .filter(contentType =>
               allPermissions.some((permission: any) =>
-                permission.action === `plugin::${PLUGIN_ID}.explorer.read` &&
+                permission.action === `plugin::${PLUGIN_ID}.explorer.view-deleted` &&
                 permission.subject === contentType.uid
               )
             )
