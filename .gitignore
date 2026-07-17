@@ -101,6 +101,10 @@ public/uploads/*
 
 dist
 build
+# NOTE: this branch intentionally vendors the built dist/ output so it can be
+# installed directly as a git dependency (Yarn's git resolver doesn't run
+# `prepare`/build scripts before packing). Do not merge this branch upstream.
+!dist
 
 
 ############################
